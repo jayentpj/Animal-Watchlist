@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    networks:
+      - animals_net
+
+  user_service:
+    build:
+      context: ./user_service
+      dockerfile: Dockerfile
+    container_name: user_service
+    depends_on:
+      - mongodb
+    ports:
+      - "5005:5005"
+    networks:
+      - animals_net
+
+  pet_service:
+    build:
+      context: ./pet_service
+      dockerfile: Dockerfile
+    container_name: pet_service
+    depends_on:
+      - mongodb
+    ports:
+      - "5006:5006"
+    networks:
+      - animals_net
+
+networks:
+  animals_net:
+    driver: bridge
+
+
